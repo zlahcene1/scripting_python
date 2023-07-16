@@ -48,16 +48,25 @@ def cpDir(PATH):
         shutil.copytree(os.getcwd() + "/" + input("Quel repo ?") + "/", input("Ou est-ce qu'on copie? "))
     except FileExistsError:
         print("Le répertoire de destination existe déjà.")
-    except shutil.Error as e:
-        print(f"Une erreur s'est produite lors de la copie du répertoire : {e}")
+    except shutil.Error:
+        print("Une erreur est survenue")
 
 def mvDir(PATH):
-    print("mvDir")
-    sys.exit(0)
+    try:
+        shutil.move(os.getcwd() + "/" + input("Quel repo ?") + "/", os.getcwd() + "/" + input("Où ça?"))
+    except FileNotFoundError:
+        print("Repertoire n'existe pas")
+    except shutil.Error:
+        print("Une erreur est survenue")
+    
 
 def rmDir(PATH):
-    
-    sys.exit(0)
+    try:
+        os.rmdir(os.getcwd() + "/" + input("Quel repertoir? "))
+    except FileNotFoundError:
+        print("N'existe pas")
+    except OSError:
+        print("Une erreur est survenue")
 
 def openFile(PATH):
     print("openFile")
