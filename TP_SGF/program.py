@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import ftplib as ftp
 
 def lsDir(PATH):
@@ -28,20 +29,27 @@ def openDir(PATH):
 
 def renameDir(PATH):
     try:
-        os.rename(input("Quel repo/fichier? "), input("QUel est sont nouveau nom? "))
-    except OSError:
-        print("Erreur lors du renommage")
+        os.rename(input("Quel repo/fichier? "), input("QUel est son nouveau nom? "))
     except FileNotFoundError:
-        print("N'existe pas")
-
+        print("Le nom n'existe pas")
+    except OSError:
+        print("Une erreur est servenue")
 
 def creatDir(PATH):
-    print("creatDir")
-    sys.exit(0)
+    try:
+        os.mkdir(input("Quel sera son nom? "))
+    except FileExistsError:
+        print("Existe déjà")
+    except OSError:
+        print("Une erreur est survenue")
 
 def cpDir(PATH):
-    print("cpDir")
-    sys.exit(0)
+    try:
+        shutil.copytree(os.getcwd() + "/" + input("Quel repo ?") + "/", input("Ou est-ce qu'on copie? "))
+    except FileExistsError:
+        print("Le répertoire de destination existe déjà.")
+    except shutil.Error as e:
+        print(f"Une erreur s'est produite lors de la copie du répertoire : {e}")
 
 def mvDir(PATH):
     print("mvDir")
@@ -53,10 +61,6 @@ def rmDir(PATH):
 
 def openFile(PATH):
     print("openFile")
-    sys.exit(0)
-
-def renameFile(PATH):
-    print("renameFile")
     sys.exit(0)
 
 def creatFile(PATH):
@@ -78,7 +82,7 @@ def rmFile(PATH):
 def printer():
     print("1. Listez les repertoires")
     print("2. Se deplacer dans un répertoire")
-    print("3. Renommer un répertoire/sous répertoire")
+    print("3. Renommer un répertoire/sous répertoire/fichier")
     print("4. Créer repertoire")
     print("5. Copier un répertoire")
     print("6. Déplacer un répertoire")
@@ -86,11 +90,10 @@ def printer():
 
     print("8. Listez les fichiers")
     print("9. Ouvrir fichier")
-    print("10. Renommer un fichier")
-    print("11. Créer un fichier")
-    print("12. Copier un fichier")
-    print("13. Déplacer un fichier")
-    print("14. Supprimer un fichier")
+    print("10. Créer un fichier")
+    print("11. Copier un fichier")
+    print("12. Déplacer un fichier")
+    print("13. Supprimer un fichier")
 
     print("0. Quitter")
 
@@ -104,7 +107,7 @@ def catchCmd():
     elif cmd == 0: sys.exit(0)
     else: return cmd
 
-funcTab = [lsDir, openDir, renameDir, creatDir, cpDir, mvDir, rmDir, lsFile, openFile, renameFile, creatFile, cpFile, mvFile, rmFile]
+funcTab = [lsDir, openDir, renameDir, creatDir, cpDir, mvDir, rmDir, lsFile, openFile, creatFile, cpFile, mvFile, rmFile]
 
 def cli(PATH):
     cmd = catchCmd()
