@@ -2,63 +2,76 @@ import sys
 import os
 import ftplib as ftp
 
-PATH = os.getcwd()
+def lsDir(PATH):
+    file = os.listdir(PATH)
+    for f in file:
+        print(f)
 
-def lsDir():
-    print("lsDir")
-    sys.exit(0)
+def lsFile(PATH):
+    file = os.listdir(PATH)
+    for f in file:
+        fpath = os.path.join(PATH, f)
+        if os.path.isfile(fpath):
+            print(f)
 
-def openDir():
-    print("openDir")
+def openDir(PATH):
+    try:
+        rep = input("quel repertoire? ")
+        PATH = os.path.join(os.getcwd(), rep)
+        os.chdir(PATH)
+        return PATH
+    except FileNotFoundError:
+        print("Repertoire non existant")
+    except PermissionError:
+        print("Pas les droits.")
 
-    PATH = os.getcwd()
-    sys.exit(0)
 
-def renameDir():
-    print("renameDir")
-    sys.exit(0)
+def renameDir(PATH):
+    try:
+        os.rename(input("Quel repo/fichier? "), input("QUel est sont nouveau nom? "))
+    except OSError:
+        print("Erreur lors du renommage")
+    except FileNotFoundError:
+        print("N'existe pas")
 
-def creatDir():
+
+def creatDir(PATH):
     print("creatDir")
     sys.exit(0)
 
-def cpDir():
+def cpDir(PATH):
     print("cpDir")
     sys.exit(0)
 
-def mvDir():
+def mvDir(PATH):
     print("mvDir")
     sys.exit(0)
 
-def rmDir():
-    print("rmDir")
+def rmDir(PATH):
+    
     sys.exit(0)
 
-def lsFile():
-    print("lsFile")
-    sys.exit(0)
-
-def openFile():
+def openFile(PATH):
     print("openFile")
     sys.exit(0)
 
-def renameFile():
+def renameFile(PATH):
     print("renameFile")
     sys.exit(0)
 
-def creatFile():
+def creatFile(PATH):
     print("creatFile")
     sys.exit(0)
 
-def cpFile():
+def cpFile(PATH):
     print("cpFile")
     sys.exit(0)
 
-def mvFile():
+def mvFile(PATH):
     print("mvFile")
     sys.exit(0)
 
-def rmFile():
+def rmFile(PATH):
     print("rmFile")
     sys.exit(0)
 
@@ -93,16 +106,15 @@ def catchCmd():
 
 funcTab = [lsDir, openDir, renameDir, creatDir, cpDir, mvDir, rmDir, lsFile, openFile, renameFile, creatFile, cpFile, mvFile, rmFile]
 
-def cli():
+def cli(PATH):
     cmd = catchCmd()
-    funcTab[cmd - 1]()
-
-    cli()
+    PATH = funcTab[cmd - 1](PATH)
+    cli(PATH)
 
 def main():
     print("Bienvenu jeune Padawan\nEs tu prêt pour l'aventure ?")
     input("O/n: ")
-    cli()
+    cli(os.getcwd())
 
 if __name__ == "__main__":
     main()
