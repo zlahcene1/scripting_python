@@ -69,24 +69,39 @@ def rmDir(PATH):
         print("Une erreur est survenue")
 
 def openFile(PATH):
-    print("openFile")
-    sys.exit(0)
+    try:
+        with open(os.getcwd() + "/" + input("Quel fichier? "), 'r') as fd:
+            print(fd.read())
+    except FileNotFoundError:
+        print("N'existe pas")
+    except IOError:
+        print("Une erreur est survenue")
 
 def creatFile(PATH):
-    print("creatFile")
-    sys.exit(0)
+    try:
+        open(os.getcwd() + "/" + input("Nom du fichier "), 'w')
+    except IOError:
+        print("Une erreur est survenue")
 
 def cpFile(PATH):
     print("cpFile")
     sys.exit(0)
 
 def mvFile(PATH):
-    print("mvFile")
-    sys.exit(0)
+    try:
+        shutil.move(os.getcwd() + "/" + input("Quel fichier ?") + "/", input("Ou est-ce qu'on copie? "))
+    except FileExistsError:
+        print("Le fichier existe déjà.")
+    except shutil.Error:
+        print("Une erreur est survenue")
 
 def rmFile(PATH):
-    print("rmFile")
-    sys.exit(0)
+    try:
+        os.remove(os.getcwd() + "/" + input("Quel fichier?"))
+    except FileNotFoundError:
+        print("Fichier n'existe pas")
+    except OSError:
+        print("Erreur survenue")
 
 def printer():
     print("1. Listez les repertoires")
