@@ -1,12 +1,18 @@
 import sys
 import os
 import shutil
-import ftplib as ftp
+import ftplib as FTP
+import socket
+import time
+
+_ftp = None
 
 def lsDir(PATH):
     file = os.listdir(PATH)
     for f in file:
         print(f)
+    print("\n")
+    time.sleep(1)
 
 def lsFile(PATH):
     file = os.listdir(PATH)
@@ -14,6 +20,8 @@ def lsFile(PATH):
         fpath = os.path.join(PATH, f)
         if os.path.isfile(fpath):
             print(f)
+    print("\n")
+    time.sleep(1)
 
 def openDir(PATH):
     try:
@@ -122,26 +130,40 @@ def printer():
     print("0. Quitter")
 
 
-def catchCmd():
-    printer()
-    cmd = input("$> ")
-    if not cmd.isdigit(): catchCmd()
-    cmd = int(cmd)
-    if cmd > 14: catchCmd()
-    elif cmd == 0: sys.exit(0)
-    else: return cmd
-
 funcTab = [lsDir, openDir, renameDir, creatDir, cpDir, mvDir, rmDir, lsFile, openFile, creatFile, cpFile, mvFile, rmFile]
 
 def cli(PATH):
-    cmd = catchCmd()
-    PATH = funcTab[cmd - 1](PATH)
-    cli(PATH)
+    printer()
+    cmd = input("$> ")
+    if not cmd.isdigit(): cli(PATH)
+    cmd = int(cmd)
+    if cmd > 14: cli(PATH)
+    elif cmd == 0: return 0
+    else:
+        PATH = funcTab[cmd - 1](PATH)
+        cli(PATH)
 
 def main():
-    print("Bienvenu jeune Padawan\nEs tu prêt pour l'aventure ?")
-    input("O/n: ")
-    cli(os.getcwd())
+    l = "ftppython"
+    p = "ftppython123"
+    ftp_host = "37.44.238.144"
+
+    try:
+        MonSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        MonSocket.connect((ftp_host, 21))
+    except socket.error:
+        print("La connexion a échoué.")
+        sys.exit(1)
+    try:
+        ftp = FTP.FTP()
+        ftp.connect(ftp_host)
+        ftp.login(l, p)
+        print("Connexion établie avec le serveur.")
+        cli(os.getcwd())
+        ftp.quit()
+
+    except FTP as err:
+        print("Erreur de connexion:", str(err))
 
 if __name__ == "__main__":
     main()
